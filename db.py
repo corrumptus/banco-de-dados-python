@@ -44,21 +44,20 @@ def Logar_usuario():
 	return
 
 def Cadastra_conta():
-	nome = input('Digite o seu nome de usuários\n') #n diferencia letra maiuscula de minuscula, checar existencia do usuário
+	nome = input('Digite o seu nome de usuários\n').lower()
 	if Checa_usu(nome) == False:
-		senha = input('Digite a sua senha(não se esqueça dela)\n')
+		senha = input('Digite a sua senha(não se esqueça dela)\n').lower()
 		if len(senha) >= 6:
-			senha2 = input('Digite a sua senha novamente(não se esqueça dela)\n')
+			senha2 = input('Digite a sua senha novamente(não se esqueça dela)\n').lower()
 			if senha == senha2:
-				nome_arquivo = nome+','+senha+'.txt'
-				arq = open(nome_arquivo, 'w')
+				arq = open(nome+','+senha+'.txt', 'w', encoding='utf8')
 				arq.write('-------Avisos/Lembretes-------\n')
 				arq.write('------------Texto-------------\n')
 				arq.write('---------Área secreta---------\n')
 				arq.close()
 				tipo = input('Digite um tipo de contato para segurança(email, telefone...)\n')
 				contato = input('Digite um contato de segurança\n')
-				Adiciona_nome(nome_arquivo, contato, tipo)
+				Adiciona_nome(nome+','+senha+'.txt', contato, tipo)
 			else:
 				print('Senhas diferentes, tente novamente')
 		else:
@@ -94,26 +93,31 @@ def Suporte():
 	arq_ADM = open(arq_adm, 'w')
 	for i in range(n):
 		arq_ADM.write(a_ADM[i])
-	arq_ADM.write('o usuário ' + usuario + 'perdeu sua senha. Entrar em contato com o mesmo via: ' + contato + '(' + tipo + ')')
+	arq_ADM.write('o usuário ' + usuario + 'perdeu sua senha. Entrar em contato com o mesmo via: ' + contato + '(' + tipo + ')') #achar o tipo dentro do arquivo admin
 	for i in range(n, len(a_ADM)+1):
 		arq_ADM.write(a_ADM[i])
 	return
 
 def Adiciona_nome(nome, contato, tipo):
 	arq_ADM, n, n2= Carrega_ADM()
-	arq = open(arq_adm, 'w')
+	arq = open(arq_adm, 'w', encoding='utf8')
 	for i in range(n):
-		arq.write(arq_ADM[i])
+		arq.write(arq_ADM[i]+'\n')
 	for i in range(n, n2):
-		arq.write(arq_ADM[i])
-	arq.write(nome + ' || ' + contato + ' || ' + tipo)
-	for i in range(n2, len(arq_ADM)+1):
-		arq.write(arq_ADM[i])
+		arq.write(arq_ADM[i]+'\n')
+	arq.write(nome + ' || ' + contato + ' || ' + tipo+'\n')
+	for i in range(n2, len(arq_ADM)):
+		arq.write(arq_ADM[i]+'\n')
+	arq.write('Novo usuário criado: '+ nome+'\n')
+	arq.close()
+	log = open('Logs.txt','a', encoding='utf8')
+	log.write('Novo usuário criado: '+ nome+'\n')
+	log.close()
 
 
 arq_adm = 'AdminAdmin.txt'
 opcao = 1
-while opcao != 0:
+while opcao != 0: #criara função main
 	opcao = menu_nCad()
 	if opcao == 1:
 		op = 1

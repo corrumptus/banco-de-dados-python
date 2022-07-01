@@ -1,5 +1,3 @@
 -------Avisos/Lembretes-------
--------Texto-------
-Lucaslucas1.txt
-lucasLucas1.txt
+-------Contas-------
 -------Log-------
