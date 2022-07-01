@@ -1,2 +1,5 @@
-lucaslucas.txtLucasLucas.txtlucaslucas1.txt
-LucasLucas1.txt
+-------Avisos/Lembretes-------
+-------Texto-------
+Lucaslucas1.txt
+lucasLucas1.txt
+-------Log-------

@@ -50,15 +50,15 @@ def Cadastra_conta():
 		if len(senha) >= 6:
 			senha2 = input('Digite a sua senha novamente(não se esqueça dela)\n')
 			if senha == senha2:
-				arq = open(nome+senha+'.txt', 'w')
+				nome_arquivo = nome+','+senha+'.txt'
+				arq = open(nome_arquivo, 'w')
 				arq.write('-------Avisos/Lembretes-------\n')
 				arq.write('------------Texto-------------\n')
 				arq.write('---------Área secreta---------\n')
 				arq.close()
-				os.rename((nome+senha+'.txt').lower(), nome+senha+'.txt')
-				arq = open(arq_adm, 'a')
-				arq.write(nome+senha+'.txt'+'\n')
-				arq.close()
+				tipo = input('Digite um tipo de contato para segurança(email, telefone...)\n')
+				contato = input('Digite um contato de segurança\n')
+				Adiciona_nome(nome_arquivo, contato, tipo)
 			else:
 				print('Senhas diferentes, tente novamente')
 		else:
@@ -70,10 +70,10 @@ def Cadastra_conta():
 def Carrega_ADM():
 	arq = open(arq_adm, 'r')
 	arquivo = []
-	for i in arq.readline():
+	for i in arq:
 		arquivo.append(i.replace('\n',''))
 	for i in range(len(arquivo)):
-		if arquivo[i] == '-------Texto-------':
+		if arquivo[i] == '-------Contas-------':
 			n = i
 		if arquivo[i] == '-------Log-------':
 			n2 = i
@@ -90,7 +90,6 @@ def Checa_usu(nome):
 def Suporte():
 	usuario = input('Digite o seu nome de usuário\n') #checar se existe
 	contato = input('Digite o seu contato cadastrado\n') #checar validade
-	tipo = input('Digite o tipo de contato(telefone, email...)')
 	a_ADM, n, n2 = Carrega_ADM()
 	arq_ADM = open(arq_adm, 'w')
 	for i in range(n):
@@ -100,6 +99,16 @@ def Suporte():
 		arq_ADM.write(a_ADM[i])
 	return
 
+def Adiciona_nome(nome, contato, tipo):
+	arq_ADM, n, n2= Carrega_ADM()
+	arq = open(arq_adm, 'w')
+	for i in range(n):
+		arq.write(arq_ADM[i])
+	for i in range(n, n2):
+		arq.write(arq_ADM[i])
+	arq.write(nome + ' || ' + contato + ' || ' + tipo)
+	for i in range(n2, len(arq_ADM)+1):
+		arq.write(arq_ADM[i])
 
 
 arq_adm = 'AdminAdmin.txt'
