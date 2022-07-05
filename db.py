@@ -4,7 +4,7 @@ import os
 def main():
 	opcao = 1
 	while opcao != 0:
-		print('1 - Entrar em uma conta')
+		print('1 - Entrar em sua conta')
 		print('2 - Entrar como administrador')
 		print('3 - Contatos')
 		print('4 - Cadastrar uma conta')
@@ -15,7 +15,12 @@ def main():
 		if opcao == 1:
 			main_logar()
 		elif opcao == 2:
-			main_Adm()
+			nome = input('Digite o nome de usuário\n')
+			senha = input('Digite a senha\n')
+			if nome and senha == 'Admin':
+				main_Adm()
+			else:
+				print('login invalido')
 		elif opcao == 3:
 			Contatos()
 		elif opcao == 4:
@@ -23,7 +28,7 @@ def main():
 		elif opcao == 5:
 			Suporte()
 		elif opcao == 6:
-			tutorial()
+			tutorial(1)
 	return
 
 def main_logar():
@@ -55,31 +60,33 @@ def main_logar():
 			elif opcao == 5:
 				main_secreta()
 			elif opcao == 6:
-				Escrever(arquivo, [1,0,0], [0,0,1])
+				mensagem = input('Digite a mensagem\n')
+				Escrever(arquivo, mensagem, [1,0,0], [0,0,1])
 			elif opcao == 7:
 				trocar()
 			elif opcao == 8:
 				Apagar()
 			elif opcao == 9:
-				tutorial()
+				tutorial(2)
 	else:
 		print('Usuario e/ou senha incorreto(s), tente novamente')
 	return
 
 def main_Adm():
 	opcao = 1
-	while opcao != 6:
+	while opcao != 7:
 		print('1 - Ver quantas pessoas estão cadastradas')
 		print('2 - Listar pessoas cadastradas')
 		print('3 - Adicionar um aviso para todos os usuários')
-		print('4 - Modificar o nome de usuário de um usuário')
+		print('4 - Modificar o nome/senha de um usuário')
 		print('5 - Remover uma conta')
-		print('6 - Voltar ao menu principal')
+		print('6 - Ver tutorial')
+		print('7 - Voltar ao menu principal')
 		opcao = int(input('Digite a opção desejada\n'))
 		if opcao == 1:
-			N_cadastros()
+			Cadastrados(1)
 		elif opcao == 2:
-			Listar_cadastros()
+			Cadastrados(2)
 		elif opcao == 3:
 			Avisar_todos()
 		elif opcao == 4:
@@ -94,10 +101,12 @@ def main_Adm():
 		elif opcao == 5:
 			nome = input('Digite o nome do usuário\n')
 			Remove(nome)
+		elif opcao == 6:
+			tutorial(3)
 	return
 
 def Contatos():
-	print('#contato do github')
+	print('https://github.com/corrumptus')
 	print('email: surx42@gmail.com')
 	print('telefone: (12) 93456-7810')
 	return
@@ -110,8 +119,29 @@ def main_secreta():
 
 	return
 
-def tutorial():
-
+def tutorial(k):
+	if k == 1:
+		print('Bem vindo ao tutorial do menu principal')
+		print('Toda vez que você entrar no sistema, verá as opções do menu principal, onde deverá dizer o que deseja fazer.')
+		print('Quando descidir o que quer fazer, você será redirecionado para outro lugar, onde fará o que o sistema disponibilizar.')
+		print('Caso você tenha perdido a sua senha, não se preocupe, pois você pode solicitar ao suporte que te reenvie a sua senha para o seu contato de segurança.')
+		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.')
+	elif k == 2:
+		print('Bem vindo ao tutorial do menu do usuário')
+		print('Toda vez que você se cadastra no nosso sistema você ganha um arquivo só seu, que possui 3 sessões de texto: Avisos/lembretes, Texto e Área secreta.')
+		print('Além de você ter a liberdade de escrever o que quiser, nós te garantimos que ninguém pode ler o que está escrito. Segurança total e irrestrita.')
+		print('Na primeira sessão(avisos e lembretes), você pode deixar um lembrete ou receber um aviso vindo do suporte.')
+		print('Na segunda sessão(texto), você pode escrever qualquer coisa, sendo esse o texto visível que só você pode editar.')
+		print('Na terceira sessão(área secreta), você pode escrever qualquer coisa, onde só você pode editar e VER. (mas lembre-se, para acessála você deve entrar nessa sessão).')
+		print('Além dessas funcionalidades, você também pode trocar a sua senha e o seu nome de usuário(para um que não esteja sendo usuado).')
+		print('Na pior das hipóteses, se você se cansar dos nossos serviços, você tem a opção de excluir permanentemente sua conta.')
+		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.')
+	elif k == 3:
+		print('Bem vindo ao menu de administrador')
+		print('Com o cargo de administrador você obtem grande poder sobre o sistema podendo obter informações dele ou informando os nossos usuário.')
+		print('Você pode até mesmo mudar o nome de usuário de alguém ou ser o juiz excluindo a conta de alguém.')
+		print('Use o seu poder com responsabilidade. não se esqueça que pessoas podem ser inocentes no fim das contas.')
+		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.')
 	return
 
 #------------------Sessão de processamento------------------
@@ -129,7 +159,10 @@ def Cadastra_conta():
 				arq.close()
 				tipo = input('Digite um tipo de contato para segurança(email, telefone...)\n').strip().lower()
 				contato = input('Digite um contato de segurança\n').strip()
-				Adiciona_nome(nome + ',' + senha + '.txt', contato, tipo) #### Log
+				if ' || ' not in nome or senha or contato or tipo:
+					Adiciona_nome(nome + ',' + senha + '.txt', contato, tipo) #### Log
+				else:
+					print('Algo possui um elemento " || ", o que não pode, tente novamente')
 			else:
 				print('Senhas diferentes, tente novamente')
 		else:
@@ -172,8 +205,7 @@ def Exibir(nome, sec1, sec2, sec3):
 		print(arquivo[i])
 	return
 
-def Escrever(nome, listasec1, listasec2):
-	mensagem = input('Digite a mensagem\n')
+def Escrever(nome, mensagem, listasec1, listasec2):
 	arq1, n, n2 = Carrega_arq(nome)
 	arq2 = open(nome, 'w', encoding = 'utf8')
 	for i in range(0*listasec1[0] + n*listasec1[1] + n2*listasec1[2], n*listasec1[0] + n2*listasec1[1] + len(arq1)*listasec1[2]):
@@ -193,20 +225,24 @@ def trocar():
 
 	return
 
-def N_cadastros():
+def trocar_senha():
 
 	return
 
-def Listar_cadastros():
-
+def Cadastrados(k):
+	arq, n, n2 = Carrega_arq('AdminAdmin.txt')
+	if k == 1:
+		print('Existem ' + str(n2-n-1) + 'contas cadastradas')
+	elif k == 2:
+		for i in range(n, n2):
+			print(arq[i])
 	return
 
 def Avisar_todos():
-
-	return
-
-def trocar_senha():
-
+	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
+	mensagem = input('Digite a mensagem\n')
+	for i in range(n+1, n2):
+		Escrever(arq_ADM[i], mensagem, [1,0,0], [0,0,1])
 	return
 
 def Remove():
