@@ -1,4 +1,5 @@
 import os
+from tkinter import N
 
 #------------------Sessão de menus------------------
 def main():
@@ -37,17 +38,18 @@ def main_logar():
 	if Checa_senha(nome, senha) == True:
 		opcao = 1
 		arquivo = nome + ',' + senha + '.txt'
-		while opcao != 10:
+		while opcao != 11:
 			print('1 - Ver todo o arquivo')
 			print('2 - Ver só os avisos/lembretes')
 			print('3 - Ver só o texto')
 			print('4 - Editar arquivo')
 			print('5 - Entrar na área secreta')
 			print('6 - Solicitar suporte')
-			print('7 - Trocar nome de usuário/senha')
-			print('8 - Apagar conta')
-			print('9 - Ver tutorial')
-			print('10 - Voltar ao menu principal')
+			print('7 - Trocar nome de usuário')
+			print('8 - Trocar a senha')
+			print('9 - Apagar conta')
+			print('10 - Ver tutorial')
+			print('11 - Voltar ao menu principal')
 			opcao = int(input('Digite a opção desejada\n'))
 			if opcao == 1:
 				Exibir(arquivo, 1, 1, 0)
@@ -63,10 +65,12 @@ def main_logar():
 				mensagem = input('Digite a mensagem\n')
 				Escrever(arquivo, mensagem, [1,0,0], [0,0,1])
 			elif opcao == 7:
-				trocar()
+				Trocar(nome, 1)
 			elif opcao == 8:
-				Apagar()
+				Trocar(nome, 2)
 			elif opcao == 9:
+				Apagar()
+			elif opcao == 10:
 				tutorial(2)
 	else:
 		print('Usuario e/ou senha incorreto(s), tente novamente')
@@ -74,14 +78,15 @@ def main_logar():
 
 def main_Adm():
 	opcao = 1
-	while opcao != 7:
+	while opcao != 8:
 		print('1 - Ver quantas pessoas estão cadastradas')
 		print('2 - Listar pessoas cadastradas')
 		print('3 - Adicionar um aviso para todos os usuários')
-		print('4 - Modificar o nome/senha de um usuário')
-		print('5 - Remover uma conta')
-		print('6 - Ver tutorial')
-		print('7 - Voltar ao menu principal')
+		print('4 - Modificar o nome de um usuário')
+		print('5 - Modificar a senha de um usuário')
+		print('6 - Remover uma conta')
+		print('7 - Ver tutorial')
+		print('8 - Voltar ao menu principal')
 		opcao = int(input('Digite a opção desejada\n'))
 		if opcao == 1:
 			Cadastrados(1)
@@ -90,18 +95,15 @@ def main_Adm():
 		elif opcao == 3:
 			Avisar_todos()
 		elif opcao == 4:
-			qual = input('Digite o que será trocado(nome/senha)\n')
-			if qual == 'nome':
-				qual = input('Digite o nome do usuário\n')
-				trocar(qual)
-			elif qual == 'senha':
-				qual = input('Digite o nome do usuário\n')
-				qualsenha = input('Digite a senha do usuário\n')
-				trocar_senha(qual, qualsenha)
+			nome = input('Digite o nome do usuário')
+			Trocar(nome, 1)
 		elif opcao == 5:
-			nome = input('Digite o nome do usuário\n')
-			Remove(nome)
+			nome = input('Digite o nome do usuário')
+			Trocar(nome, 2)
 		elif opcao == 6:
+			nome = input('Digite o nome do usuário\n')
+			Excluir(nome)
+		elif opcao == 7:
 			tutorial(3)
 	return
 
@@ -111,12 +113,35 @@ def Contatos():
 	print('telefone: (12) 93456-7810')
 	return
 
-def main_edicao():
-
+def main_edicao(arq):
+	opcao = 1
+	while opcao != 7:
+		print('1 - Escrever um novo lembrete')
+		print('2 - Escrever uma nova linha de texto')
+		print('3 - Excluir um aviso/lembrete')
+		print('4 - Excluir uma linha de texto')
+		print('5 - Excluir todos os avisos/lembretes')
+		print('6 - Excluir todo o texto')
+		print('7 - Voltar ao menu de usuário')
+		opcao = int(input('Digite a opção desejada\n'))
+		if opcao == 1:
+			lembrete = input('Digite o novo lembrete\n')
+			Escrever(arq, lembrete, [1, 0, 0], [0, 0, 1])
+		elif opcao == 2:
+			texto = input('Digite a nova linha de texto\n')
+			Escrever(arq, texto, [0, 1, 0], [0, 0, 1])
+		elif opcao == 3:
+			Apagar(arq, 1)
+		elif opcao == 4:
+			Apagar(arq, 2)
+		elif opcao == 5:
+			Apagar_tudo(arq, 1)
+		elif opcao == 6:
+			Apagar_tudo(arq, 2)
 	return
 
 def main_secreta():
-
+	############cadastrar uma senha no cadastro
 	return
 
 def tutorial(k):
@@ -147,9 +172,9 @@ def tutorial(k):
 #------------------Sessão de processamento------------------
 def Cadastra_conta():
 	nome = input('Digite o seu nome de usuários\n').lower().strip()
-	if Checa_usu(nome) == False:
+	if Checa_usu(nome) == False and ',' not in nome:
 		senha = input('Digite a sua senha(não se esqueça dela)\n').lower().strip()
-		if len(senha) >= 6:
+		if len(senha) >= 6 and '.txt' not in senha:
 			senha2 = input('Digite a sua senha novamente(não se esqueça dela)\n').lower().strip()
 			if senha == senha2:
 				arq = open(nome + ',' + senha + '.txt', 'w', encoding ='utf8')
@@ -217,16 +242,59 @@ def Escrever(nome, mensagem, listasec1, listasec2):
 	arq2.close()
 	return
 
-def Apagar():
-
+def Apagar(arquivo, k):
+	arq, n, n2 = Carrega_arq(arquivo)
+	if k == 1:
+		print(arq[0])
+		for i in range(1, n):
+			print(str(i) + '. ' + arq[i])
+		linha = int(input('Digite a linha a ser excluida\n'))
+	if k == 2:
+		print(arq[n])
+		for i in range(n+1, n2):
+			print(str(i-n) + '. ' + arq[i])
+		linha = int(input('Digite a linha a ser excluida\n')) + n
+	for i in range(linha, len(arq)-1):
+		arq[i] = arq[i+1]
 	return
 
-def trocar():
+def Apagar_tudo(arquivo, k):
+	arq, n, n2 = Carrega_arq(arquivo)
+	if k == 1:
+		for i in range(1, len(arq)-n+1):
+			arq[i] = arq[i+n-1]
+		for i in range(n-1):
+			arq.pop()
+	if k == 2: #####################################
+		for i in range(n+1, len(arq)-n+1):
+			arq[i] = arq[i+n-1]
+		for i in range(n-1, n2):
+			arq.pop()
 
-	return
-
-def trocar_senha():
-
+def Trocar(nome, k):
+	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
+	if k == 1:
+		nome2 = input('Digite o novo nome\n')
+		for i in range(n+1,n2):
+			n3 = arq_ADM[i].find(',')
+			if arq_ADM[i][0:n3] == nome:
+				n4 = arq_ADM[i].find('.txt')
+				arq1 = arq_ADM[i][0:n4] + '.txt'
+				arq_ADM[i] = nome2 + arq_ADM[i][n3:]
+				n4 = arq_ADM[i].find('.txt')
+				arq2 = arq_ADM[i][0:n4] + '.txt'
+				os.rename(arq1, arq2)
+	if k == 2:
+		senha = input('Digite a nova senha\n')
+		for i in range(n+1, n2):
+			n3 = arq_ADM[i].find(',')
+			if arq_ADM[i][0:n3] == nome:
+				n4 = arq_ADM[i].find('.txt')
+				arq1 = arq_ADM[i][0:n4] + '.txt'
+				arq_ADM[i] = arq_ADM[i][0:n3+1] + senha + arq_ADM[i][n4:]
+				n4 = arq_ADM[i].find('.txt')
+				arq2 = arq_ADM[i][0:n4] + '.txt'
+				os.rename(arq1, arq2)
 	return
 
 def Cadastrados(k):
@@ -245,9 +313,16 @@ def Avisar_todos():
 		Escrever(arq_ADM[i], mensagem, [1,0,0], [0,0,1])
 	return
 
-def Remove():
-
-	return
+def Excluir(nome):
+	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
+	for i in range(n+1, n2):
+		n3 = arq_ADM[i].find(',')
+		if arq_ADM[i][0:n3] == nome:
+			n4 = arq_ADM[i].find('.txt')
+			os.remove(arq_ADM[i][0:n4]+'.txt')
+			for j in range(i, len(arq_ADM)-1):
+				arq_ADM[j] = arq_ADM[j+1]
+			arq_ADM.pop()
 
 def aciona_Log(mensagem):
 	log = open('Logs.txt', 'a', encoding ='utf8')
