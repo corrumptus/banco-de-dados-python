@@ -140,9 +140,28 @@ def main_edicao(arq):
 			Apagar_tudo(arq, 2)
 	return
 
-def main_secreta():
-	############cadastrar uma senha no cadastro
-	return
+def main_secreta(arq):
+	senha = input('Digite a sua senha\n')
+	if Checa_senha_secreta(arq, senha) == True:
+		opcao = 1
+		while opcao != 5:
+			print('1 - Ver a área secreta')
+			print('2 - Escrever na até secreta')
+			print('3 - Apagar uma linha da área secreta')
+			print('4 - Apagar toda a área secreta')
+			print('5 - voltar ao menu de usuário')
+			opcao = int(input('Digite a opção desejada\n'))
+			if opcao == 1:
+				Exibir(arq, 0, 0, 1)
+			elif opcao == 2:
+				mensagem = input('Digite a nova linha secreta\n')
+				Escrever(arq, mensagem, [0,0,1], [0,0,0])
+			elif opcao == 3:
+				Apagar(arq, 3)
+			elif opcao == 4:
+				Apagar_tudo(arq, 3)
+	else:
+		print('Senha incorreta, tente novamente')
 
 def tutorial(k):
 	if k == 1:
@@ -181,6 +200,7 @@ def Cadastra_conta():
 				arq.write('-------Avisos/Lembretes-------\n')
 				arq.write('------------Texto-------------\n')
 				arq.write('---------Área secreta---------\n')
+				arq.write('Senha: ' + input('Digite uma senha para proteger a sua área secreta\n'))
 				arq.close()
 				tipo = input('Digite um tipo de contato para segurança(email, telefone...)\n').strip().lower()
 				contato = input('Digite um contato de segurança\n').strip()
@@ -254,8 +274,14 @@ def Apagar(arquivo, k):
 		for i in range(n+1, n2):
 			print(str(i-n) + '. ' + arq[i])
 		linha = int(input('Digite a linha a ser excluida\n')) + n
+	if k == 3:
+		print(arq[n2])
+		for i in range(n2+2, len(arq)):
+			print(str(i-n2) + '. ' + arq[i])
+		linha = int(input('Digite a linha a ser excluida\n')) + n2 + 1
 	for i in range(linha, len(arq)-1):
 		arq[i] = arq[i+1]
+	arq.pop()
 	return
 
 def Apagar_tudo(arquivo, k):
@@ -265,10 +291,13 @@ def Apagar_tudo(arquivo, k):
 			arq[i] = arq[i+n-1]
 		for i in range(n-1):
 			arq.pop()
-	if k == 2: #####################################
-		for i in range(n+1, len(arq)-n+1):
-			arq[i] = arq[i+n-1]
-		for i in range(n-1, n2):
+	if k == 2:
+		for i in range(n+1, len(arq)-n2+n+1):
+			arq[i] = arq[i+n2-n-1]
+		for i in range(n+1, n2):
+			arq.pop()
+	if k == 3:
+		for i in range(n2+2, len(arq)):
 			arq.pop()
 
 def Trocar(nome, k):
@@ -364,6 +393,12 @@ def Checa_senha(nome, senha):
 		n4 = arq_ADM[i].find('.txt')
 		if arq_ADM[i][0:n3] == nome and arq_ADM[i][n3+1:n4] == senha:
 			return True
+	return False
+
+def Checa_senha_secreta(arquivo, nome):
+	arq, n, n2 = Carrega_arq(arquivo)
+	if arq[n2+1][7:] == nome:
+		return True
 	return False
 
 def Acha_tipo(nome):
