@@ -1,5 +1,4 @@
 import os
-from tkinter import N
 
 #------------------Sessão de menus------------------
 def main():
@@ -60,7 +59,7 @@ def main_logar():
 			elif opcao == 4:
 				main_edicao(arquivo)
 			elif opcao == 5:
-				main_secreta()
+				main_secreta(arquivo)
 			elif opcao == 6:
 				mensagem = input('Digite a mensagem\n')
 				Escrever(arquivo, mensagem, [1,0,0], [0,0,1])
@@ -69,7 +68,8 @@ def main_logar():
 			elif opcao == 8:
 				Trocar(nome, 2)
 			elif opcao == 9:
-				Apagar()
+				Excluir(nome)
+				opcao = 11
 			elif opcao == 10:
 				tutorial(2)
 	else:
@@ -109,7 +109,7 @@ def main_Adm():
 
 def Contatos():
 	print('https://github.com/corrumptus')
-	print('email: surx42@gmail.com')
+	print('email: py.db.suporte@gmail.com')
 	print('telefone: (12) 93456-7810')
 	return
 
@@ -188,7 +188,7 @@ def tutorial(k):
 		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.')
 	return
 
-#------------------Sessão de processamento------------------
+#------------------Sessão de processamento------------------ Verificar se existem função que só salvam mudanças na memória(até o fim do código), acionar logs, função que deixa apenas 100 logs no arquivo do admin(tbm cadastrar logs no arquivo Admin)
 def Cadastra_conta():
 	nome = input('Digite o seu nome de usuários\n').lower().strip()
 	if Checa_usu(nome) == False and ',' not in nome:
@@ -250,9 +250,9 @@ def Exibir(nome, sec1, sec2, sec3):
 		print(arquivo[i])
 	return
 
-def Escrever(nome, mensagem, listasec1, listasec2):
-	arq1, n, n2 = Carrega_arq(nome)
-	arq2 = open(nome, 'w', encoding = 'utf8')
+def Escrever(arquivo, mensagem, listasec1, listasec2):
+	arq1, n, n2 = Carrega_arq(arquivo)
+	arq2 = open(arquivo, 'w', encoding = 'utf8')
 	for i in range(0*listasec1[0] + n*listasec1[1] + n2*listasec1[2], n*listasec1[0] + n2*listasec1[1] + len(arq1)*listasec1[2]):
 		arq2.write(arq1[i])
 	arq2.write(mensagem)
@@ -343,29 +343,26 @@ def Avisar_todos():
 	return
 
 def Excluir(nome):
-	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
-	for i in range(n+1, n2):
-		n3 = arq_ADM[i].find(',')
-		if arq_ADM[i][0:n3] == nome:
-			n4 = arq_ADM[i].find('.txt')
-			os.remove(arq_ADM[i][0:n4]+'.txt')
-			for j in range(i, len(arq_ADM)-1):
-				arq_ADM[j] = arq_ADM[j+1]
-			arq_ADM.pop()
+	certeza = input('Você tem certeza de que deseja excluir sua conta? Este ato é completamente irreversível(sim/não)\n')
+	if certeza.strip().lower() == 'sim':
+		arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
+		for i in range(n+1, n2):
+			n3 = arq_ADM[i].find(',')
+			if arq_ADM[i][0:n3] == nome:
+				n4 = arq_ADM[i].find('.txt')
+				os.remove(arq_ADM[i][0:n4]+'.txt')
+				for j in range(i, len(arq_ADM)-1):
+					arq_ADM[j] = arq_ADM[j+1]
+				arq_ADM.pop()
 
-def aciona_Log(mensagem):
-	log = open('Logs.txt', 'a', encoding ='utf8')
-	log.write(mensagem + '\n')
-	log.close()
-	return
 #------------------Sessão de processamento suporte------------------
-def Carrega_arq(nome):
-	arq = open(nome, 'r')
+def Carrega_arq(arquivo):
+	arq = open(arquivo, 'r')
 	arquivo = []
 	for i in arq:
 		arquivo.append(i.replace('\n',''))
 	for i in range(len(arquivo)):
-		if nome == 'AdminAdmin.txt':
+		if arquivo == 'AdminAdmin.txt':
 			if arquivo[i] == '-------Contas-------':
 				n = i
 			if arquivo[i] == '-------Log-------':
@@ -434,6 +431,12 @@ def Adiciona_nome(nome, contato, tipo):
 	arq.close()
 	log = open('Logs.txt', 'a', encoding ='utf8')
 	log.write('Novo usuário criado: ' + nome + '\n')
+	log.close()
+	return
+
+def aciona_Log(mensagem):
+	log = open('Logs.txt', 'a', encoding ='utf8')
+	log.write(mensagem + '\n')
 	log.close()
 	return
 
