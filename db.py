@@ -14,17 +14,17 @@ def main():
 		opcao = int(input('Digite a opção desejada\n'))
 		if opcao == 1:
 			main_logar()
-		elif opcao == 2:
+		if opcao == 2:
 			main_Adm()
-		elif opcao == 3:
+		if opcao == 3:
 			Contatos()
-		elif opcao == 4:
+		if opcao == 4:
 			Cadastra_conta()
-		elif opcao == 5:
+		if opcao == 5:
 			contato = input('Digite um meio de contato para a ajuda\n')
 			mensagem = input('Faça a sua pergunta ao suporte (apenas coisas relevantes, não se esqueça de acessar ao tutorial)\n')
 			Escrever('AdminAdmin.txt', 'Ajuda para ' + contato + ': ' + mensagem, 1)
-		elif opcao == 6:
+		if opcao == 6:
 			tutorial(1)
 	return
 
@@ -34,7 +34,7 @@ def main_logar():
 	if Checa_senha(nome, senha) == True:
 		opcao = 1
 		arquivo = nome + ',' + senha + '.txt'
-		aciona_Log('O usuário ' + nome + ' entrou na conta.')
+		aciona_Log('O usuário ' + nome + ' acessou sua conta.')
 		while opcao != 11:
 			print('1 - Ver todo o arquivo')
 			print('2 - Ver só os avisos/lembretes')
@@ -50,26 +50,26 @@ def main_logar():
 			opcao = int(input('Digite a opção desejada\n'))
 			if opcao == 1:
 				Exibir(arquivo, 1, 1, 0)
-			elif opcao == 2:
+			if opcao == 2:
 				Exibir(arquivo, 1, 0, 0)
-			elif opcao == 3:
+			if opcao == 3:
 				Exibir(arquivo, 0, 1, 0)
-			elif opcao == 4:
+			if opcao == 4:
 				main_edicao(arquivo)
-			elif opcao == 5:
+			if opcao == 5:
 				main_secreta(arquivo)
-			elif opcao == 6:
+			if opcao == 6:
 				mensagem = input('Faça a sua pergunta ao suporte (apenas coisas relevantes, não se esqueça de acessar ao tutorial)\n')
 				Escrever('AdminAdmin.txt', 'Ajuda para ' + Acha_contato(nome) + ': ' + mensagem, 1)
-			elif opcao == 7:
+			if opcao == 7:
 				Trocar(nome, 1)
-			elif opcao == 8:
+			if opcao == 8:
 				Trocar(nome, 2)
-			elif opcao == 9:
+			if opcao == 9:
 				Excluir(nome)
 				print('Muito obrigado pela preferencia, até um outro dia.')
 				opcao = 11
-			elif opcao == 10:
+			if opcao == 10:
 				tutorial(2)
 	else:
 		print('Usuario e/ou senha incorreto(s), tente novamente')
@@ -80,39 +80,45 @@ def main_Adm():
 	senha = input('Digite a senha\n')
 	if nome and senha == 'Admin':
 		opcao = 1
-		while opcao != 10:
+		while opcao != 12:
 			print('1 - Ver quantas pessoas estão cadastradas')
 			print('2 - Listar pessoas cadastradas')
 			print('3 - Adicionar um novo lembrete')
 			print('4 - Apagar um lembrete/aviso')
-			print('5 - Adicionar um aviso para todos os usuários')
-			print('6 - Modificar o nome de um usuário')
-			print('7 - Modificar a senha de um usuário')
-			print('8 - Remover uma conta')
-			print('9 - Ver tutorial')
-			print('10 - Voltar ao menu principal')
+			print('5 - Ver os últimos logs(100)')
+			print('6 - Ver todos os logs')
+			print('7 - Adicionar um aviso para todos os usuários')
+			print('8 - Modificar o nome de um usuário')
+			print('9 - Modificar a senha de um usuário')
+			print('10 - Remover uma conta')
+			print('11 - Ver tutorial')
+			print('12 - Voltar ao menu principal')
 			opcao = int(input('Digite a opção desejada\n'))
 			if opcao == 1:
-				Cadastrados(1)
-			elif opcao == 2:
-				Cadastrados(2)
-			elif opcao == 3:
+				Exibir_2(1)
+			if opcao == 2:
+				Exibir('AdminAdmin.txt', 0, 1, 0)
+			if opcao == 3:
 				lembrete = input('Digite o novo lembrete\n')
 				Escrever('AdminAdmin.txt', lembrete, 1)
-			elif opcao == 4:
+			if opcao == 4:
 				Apagar('AdminAdmin.txt', 1)
-			elif opcao == 5:
+			if opcao == 5:
+				Exibir('AdminAdmin.txt', 0, 0, 1)
+			if opcao == 6:
+				Exibir_2(2)
+			if opcao == 7:
 				Avisar_todos()
-			elif opcao == 6:
-				nome = input('Digite o nome do usuário')
+			if opcao == 8:
+				nome = input('Digite o nome do usuário\n').lower()
 				Trocar(nome, 1)
-			elif opcao == 7:
-				nome = input('Digite o nome do usuário')
+			if opcao == 9:
+				nome = input('Digite o nome do usuário\n').lower()
 				Trocar(nome, 2)
-			elif opcao == 8:
+			if opcao == 10:
 				nome = input('Digite o nome do usuário\n')
 				Excluir(nome)
-			elif opcao == 9:
+			if opcao == 11:
 				tutorial(3)
 	else:
 		print('login invalido')
@@ -138,39 +144,43 @@ def main_edicao(arq):
 		if opcao == 1:
 			lembrete = input('Digite o novo lembrete\n')
 			Escrever(arq, lembrete, 1)
-		elif opcao == 2:
+		if opcao == 2:
 			texto = input('Digite a nova linha de texto\n')
 			Escrever(arq, texto, 2)
-		elif opcao == 3:
+		if opcao == 3:
 			Apagar(arq, 1)
-		elif opcao == 4:
+		if opcao == 4:
 			Apagar(arq, 2)
-		elif opcao == 5:
+		if opcao == 5:
 			Apagar_tudo(arq, 1)
-		elif opcao == 6:
+		if opcao == 6:
 			Apagar_tudo(arq, 2)
 	return
 
 def main_secreta(arq):
-	senha = input('Digite a sua senha\n')
+	senha = input('Digite a sua senha secreta\n')
 	if Checa_senha_secreta(arq, senha) == True:
 		opcao = 1
-		while opcao != 5:
+		while opcao != 6:
 			print('1 - Ver a área secreta')
-			print('2 - Escrever na até secreta')
+			print('2 - Escrever na área secreta')
 			print('3 - Apagar uma linha da área secreta')
 			print('4 - Apagar toda a área secreta')
-			print('5 - voltar ao menu de usuário')
+			print('5 - Trocar senha secreta')
+			print('6 - voltar ao menu de usuário')
 			opcao = int(input('Digite a opção desejada\n'))
 			if opcao == 1:
 				Exibir(arq, 0, 0, 1)
-			elif opcao == 2:
+			if opcao == 2:
 				mensagem = input('Digite a nova linha secreta\n')
 				Escrever(arq, mensagem, 3)
-			elif opcao == 3:
-				Apagar(arq, 3)
-			elif opcao == 4:
+			if opcao == 3:
+				if Checa_secreta(arq) == True: ###########################
+					Apagar(arq, 3)
+			if opcao == 4:
 				Apagar_tudo(arq, 3)
+			if opcao == 5:
+				Trocar_senha_secreta(arq)
 	else:
 		print('Senha incorreta, tente novamente')
 
@@ -201,24 +211,25 @@ def tutorial(k):
 
 #------------------Sessão de processamento------------------
 def Cadastra_conta():
-	nome = input('Digite o seu nome de usuários\n').lower().strip()
+	nome = input('Digite um nome para o seu usuários\n').lower().strip()
 	if Checa_usu(nome) == False and (',' and '.txt' and ' || ' and '---------Área secreta---------' and '------------Texto-------------') not in nome:
-		senha = input('Digite a sua senha(não se esqueça dela)\n').strip()
+		senha = input('Digite uma senha(não se esqueça dela)\n').strip()
 		if len(senha) >= 6 and ('.txt' and ' || ' and '---------Área secreta---------' and '------------Texto-------------') not in senha:
 			senha2 = input('Digite a sua senha novamente(não se esqueça dela)\n').strip()
 			if senha == senha2:
-				arq = open(nome + ',' + senha + '.txt', 'w', encoding ='utf8')
-				arq.write('-------Avisos/Lembretes-------\n')
-				arq.write('------------Texto-------------\n')
-				arq.write('---------Área secreta---------\n')
-				arq.write('Senha: ' + input('Digite uma senha para proteger a sua área secreta\n'))
-				arq.close()
 				tipo = input('Digite um tipo de contato para segurança(email, telefone...)\n').strip().lower()
 				if ('.txt' and ' || ' and '---------Área secreta---------' and '------------Texto-------------') not in tipo:
 					contato = input('Digite um contato de segurança\n').strip()
 					if ('.txt' and ' || ' and '---------Área secreta---------' and '------------Texto-------------') not in contato:
+						arq = open(nome + ',' + senha + '.txt', 'w', encoding ='utf8')
+						arq.write('-------Avisos/Lembretes-------\n')
+						arq.write('------------Texto-------------\n')
+						arq.write('---------Área secreta---------\n')
+						arq.write('Senha: ' + input('Digite uma senha para proteger a sua área secreta\n'))
+						arq.close()
 						Adiciona_nome(nome + ',' + senha + '.txt', contato, tipo)
-						aciona_Log('O usuário ' + nome + ' criou uma conta.')
+						aciona_Log('Novo usuário criado: ' + nome + ',' + senha + '.')
+						print('Conta criada com sucesso')
 					else:
 						print('Possui um elemento " || ", o que não pode, tente novamente')
 				else:
@@ -231,22 +242,22 @@ def Cadastra_conta():
 		print('Esse usuário já existe ou possui um elemento " || ", o que não pode, tente novamente')
 	return
 
-def Exibir(nome, sec1, sec2, sec3):
-	arq = open(nome, 'r', encoding ='utf8')
-	arquivo = []
+def Exibir(arquivo, sec1, sec2, sec3):
+	arq = open(arquivo, 'r', encoding ='utf8')
+	Varquivo = []
 	for i in arq:
-		arquivo.append(i.replace('\n',''))
-	for i in range(len(arquivo)):
-		if arquivo[i] == '------------Texto-------------':
+		Varquivo.append(i.replace('\n',''))
+	for i in range(len(Varquivo)):
+		if Varquivo[i] == '------------Texto-------------':
 			n = i
-		if arquivo[i] == '---------Área secreta---------':
+		if Varquivo[i] == '---------Área secreta---------':
 			n2 = i
 	for i in range(0*sec1, n*sec1):
-		print(arquivo[i])
+		print(Varquivo[i])
 	for i in range(n*sec2, n2*sec2):
-		print(arquivo[i])
-	for i in range(n2*sec3, len(arquivo)*sec3):
-		print(arquivo[i])
+		print(Varquivo[i])
+	for i in range(n2*sec3, len(Varquivo)*sec3):
+		print(Varquivo[i])
 	return
 
 def Escrever(arquivo, mensagem, k):
@@ -267,7 +278,7 @@ def Escrever(arquivo, mensagem, k):
 	if k == 3:
 		for i in range(len(arq1)):
 			arq2.write(arq1[i]+'\n')
-		arq2.wirte(mensagem+'\n')
+		arq2.write(mensagem+'\n')
 	return
 
 def Apagar(arquivo, k):
@@ -318,36 +329,53 @@ def Trocar(nome, k):
 		nome2 = input('Digite o novo nome\n')
 		for i in range(n+1,n2):
 			n3 = arq_ADM[i].find(',')
-			if arq_ADM[i][0:n3] == nome:
+			if arq_ADM[i][:n3] == nome:
 				n4 = arq_ADM[i].find('.txt')
-				arq1 = arq_ADM[i][0:n4] + '.txt'
+				arq1 = arq_ADM[i][:n4] + '.txt'
 				arq_ADM[i] = nome2 + arq_ADM[i][n3:]
 				n4 = arq_ADM[i].find('.txt')
-				arq2 = arq_ADM[i][0:n4] + '.txt'
+				arq2 = arq_ADM[i][:n4] + '.txt'
 				os.rename(arq1, arq2)
-				aciona_Log('O usuário ' + nome + ' trocou de nome para ' + nome2)
+				aciona_Log('O usuário ' + nome + ' trocou de nome para ' + nome2 + '.')
 	if k == 2:
 		senha2 = input('Digite a nova senha\n')
 		for i in range(n+1, n2):
 			n3 = arq_ADM[i].find(',')
-			if arq_ADM[i][0:n3] == nome:
+			if arq_ADM[i][:n3] == nome:
 				n4 = arq_ADM[i].find('.txt')
-				arq1 = arq_ADM[i][0:n4] + '.txt'
+				arq1 = arq_ADM[i][:n4] + '.txt'
 				senha = arq_ADM[i][n3+1:n4]
-				arq_ADM[i] = arq_ADM[i][0:n3+1] + senha + arq_ADM[i][n4:]
+				arq_ADM[i] = arq_ADM[i][:n3+1] + senha2 + arq_ADM[i][n4:]
 				n4 = arq_ADM[i].find('.txt')
-				arq2 = arq_ADM[i][0:n4] + '.txt'
+				arq2 = arq_ADM[i][:n4] + '.txt'
 				os.rename(arq1, arq2)
-				aciona_Log('O usuário ' + senha + ' trocou de senha para ' + senha2)
+				aciona_Log('O usuário ' + nome + ' trocou de senha(' + senha + ') para ' + senha2 + '.')
+	arq = open('AdminAdmin.txt', 'w', encoding = 'utf8')
+	for i in range(len(arq_ADM)):
+		arq.write(arq_ADM[i]+'\n')
+	arq.close()
 	return
 
-def Cadastrados(k):
-	arq, n, n2 = Carrega_arq('AdminAdmin.txt')
+def Trocar_senha_secreta(arquivo):
+	senha2 = input('Digite a sua senha secreta\n')
+	if Checa_senha_secreta(arquivo, senha2) == True:
+		Varq, n, n2 = Carrega_arq(arquivo)
+		senha3 = input('Digite sua nova senha\n')
+		Varq[n2+1] = 'Senha: ' + senha3
+		arq = open(arquivo, 'w', encoding = 'utf8')
+		for i in range(len(Varq)):
+			arq.write(Varq[i]+'\n')
+		arq.close()
+	return
+
+def Exibir_2(k):
 	if k == 1:
+		arq, n, n2 = Carrega_arq('AdminAdmin.txt')
 		print('Existem ' + str(n2-n-1) + ' contas cadastradas')
 	elif k == 2:
-		for i in range(n, n2):
-			print(arq[i])
+		arq = open('Logs.txt', 'r', encoding = 'utf8')
+		for i in arq:
+			print(i.replace('\n', ''))
 	return
 
 def Avisar_todos():
@@ -355,10 +383,10 @@ def Avisar_todos():
 	mensagem = input('Digite a mensagem\n')
 	for i in range(n+1, n2):
 		n3 = arq_ADM[i].find('.txt')
-		Escrever(arq_ADM[i][0:n3+3], mensagem, 1)
+		Escrever(arq_ADM[i][0:n3+4], mensagem, 1)
 	return
 
-def Excluir(nome):
+def Excluir(nome): ################################
 	certeza = input('Você tem certeza de que deseja excluir sua conta? Este ato é completamente irreversível(sim/não)\n')
 	if certeza.strip().lower() == 'sim':
 		arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
@@ -370,7 +398,7 @@ def Excluir(nome):
 				for j in range(i, len(arq_ADM)-1):
 					arq_ADM[j] = arq_ADM[j+1]
 				arq_ADM.pop()
-				aciona_Log('O usuário ' + nome + ' excluiu sua conta')
+				aciona_Log('O usuário ' + nome + ' excluiu sua conta.')
 				return
 
 #------------------Sessão de processamento suporte------------------
@@ -410,9 +438,15 @@ def Checa_senha(nome, senha):
 			return True
 	return False
 
-def Checa_senha_secreta(arquivo, nome):
+def Checa_senha_secreta(arquivo, senha):
 	arq, n, n2 = Carrega_arq(arquivo)
-	if arq[n2+1][7:] == nome:
+	if arq[n2+1][7:] == senha:
+		return True
+	return False
+
+def Checa_secreta(arquivo):
+	arq, n, n2 = Carrega_arq(arquivo)
+	if len(arq) - n2 > 1:
 		return True
 	return False
 
@@ -445,7 +479,6 @@ def Adiciona_nome(nome, contato, tipo):
 	arq.write(nome + ' || ' + contato + ' || ' + tipo + '\n')
 	for i in range(n2, len(arq_ADM)):
 		arq.write(arq_ADM[i]+'\n')
-	arq.write('Novo usuário criado: ' + nome + '\n')
 	arq.close()
 	return
 
@@ -460,10 +493,14 @@ def aciona_Log(mensagem):
 
 def Checa_len_log():
 	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
-	if len(arq_ADM) - n2 == 100:
-		for i in range(n2, len(arq_ADM)-1):
+	if len(arq_ADM) - n2 - 1 == 100:
+		for i in range(n2+1, len(arq_ADM)-1):
 			arq_ADM[i] = arq_ADM[i+1]
 		arq_ADM.pop()
+		arq = open('AdminAdmin.txt', 'w', encoding = 'utf-8')
+		for i in range(len(arq_ADM)):
+			arq.write(arq_ADM[i] + '\n')
+		arq.close()
 	return
 
 main()
