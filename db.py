@@ -4,6 +4,7 @@ import os
 def main():
 	opcao = 1
 	while opcao != 0:
+		print('')
 		print('1 - Entrar em sua conta')
 		print('2 - Entrar como administrador')
 		print('3 - Contatos')
@@ -34,8 +35,17 @@ def main_logar():
 	if Checa_senha(nome, senha) == True:
 		opcao = 1
 		arquivo = nome + ',' + senha + '.txt'
+		if os.path.getsize(arquivo) == 0:
+			arq = open(arquivo, 'w', encoding ='utf8')
+			arq.write('-------Avisos/Lembretes-------\n')
+			arq.write('------------Texto-------------\n')
+			arq.write('---------Área secreta---------\n')
+			arq.close()
+			Reconstruir(arquivo)
+		Checa_secreta(arquivo)
 		aciona_Log('O usuário ' + nome + ' acessou sua conta.')
 		while opcao != 11:
+			print('')
 			print('1 - Ver todo o arquivo')
 			print('2 - Ver só os avisos/lembretes')
 			print('3 - Ver só o texto')
@@ -44,7 +54,7 @@ def main_logar():
 			print('6 - Solicitar suporte')
 			print('7 - Trocar nome de usuário')
 			print('8 - Trocar a senha')
-			print('9 - Apagar conta')
+			print('9 - Excluir conta')
 			print('10 - Ver tutorial')
 			print('11 - Voltar ao menu principal')
 			opcao = int(input('Digite a opção desejada\n'))
@@ -80,9 +90,17 @@ def main_Adm():
 	senha = input('Digite a senha\n')
 	if nome and senha == 'Admin':
 		opcao = 1
+		if os.path.getsize('AdminAdmin.txt') == 0:
+			arq = open('AdminAdmin.txt', 'w', encoding = 'utf8')
+			arq.write('-------Avisos/Lembretes-------\n')
+			arq.write('------------Contas------------\n')
+			arq.write('-------------Log--------------\n')
+			arq.close()
+			Reconstruir('AdminAdmin.txt')
 		while opcao != 12:
+			print('')
 			print('1 - Ver quantas pessoas estão cadastradas')
-			print('2 - Listar pessoas cadastradas')
+			print('2 - Listar todas as pessoas cadastradas')
 			print('3 - Adicionar um novo lembrete')
 			print('4 - Apagar um lembrete/aviso')
 			print('5 - Ver os últimos logs(100)')
@@ -102,7 +120,7 @@ def main_Adm():
 				lembrete = input('Digite o novo lembrete\n')
 				Escrever('AdminAdmin.txt', lembrete, 1)
 			if opcao == 4:
-				Apagar('AdminAdmin.txt', 1)
+				Apagar('AdminAdmin.txt', 1, 0)
 			if opcao == 5:
 				Exibir('AdminAdmin.txt', 0, 0, 1)
 			if opcao == 6:
@@ -133,6 +151,7 @@ def Contatos():
 def main_edicao(arq):
 	opcao = 1
 	while opcao != 7:
+		print('')
 		print('1 - Escrever um novo lembrete')
 		print('2 - Escrever uma nova linha de texto')
 		print('3 - Excluir um aviso/lembrete')
@@ -148,9 +167,9 @@ def main_edicao(arq):
 			texto = input('Digite a nova linha de texto\n')
 			Escrever(arq, texto, 2)
 		if opcao == 3:
-			Apagar(arq, 1)
+			Apagar(arq, 1, 0)
 		if opcao == 4:
-			Apagar(arq, 2)
+			Apagar(arq, 2, 0)
 		if opcao == 5:
 			Apagar_tudo(arq, 1)
 		if opcao == 6:
@@ -162,6 +181,7 @@ def main_secreta(arq):
 	if Checa_senha_secreta(arq, senha) == True:
 		opcao = 1
 		while opcao != 6:
+			print('')
 			print('1 - Ver a área secreta')
 			print('2 - Escrever na área secreta')
 			print('3 - Apagar uma linha da área secreta')
@@ -175,23 +195,25 @@ def main_secreta(arq):
 				mensagem = input('Digite a nova linha secreta\n')
 				Escrever(arq, mensagem, 3)
 			if opcao == 3:
-				if Checa_secreta(arq) == True: ###########################
-					Apagar(arq, 3)
+				Apagar(arq, 3)
 			if opcao == 4:
 				Apagar_tudo(arq, 3)
 			if opcao == 5:
 				Trocar_senha_secreta(arq)
 	else:
 		print('Senha incorreta, tente novamente')
+	return
 
 def tutorial(k):
 	if k == 1:
+		print('')
 		print('Bem vindo ao tutorial do menu principal')
 		print('Toda vez que você entrar no sistema, verá as opções do menu principal, onde deverá dizer o que deseja fazer.')
 		print('Quando descidir o que quer fazer, você será redirecionado para outro lugar, onde fará o que o sistema disponibilizar.')
 		print('Caso você tenha perdido a sua senha, não se preocupe, pois você pode solicitar ao suporte que te reenvie a sua senha para o seu contato de segurança.')
 		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.\n')
 	elif k == 2:
+		print('')
 		print('Bem vindo ao tutorial do menu do usuário')
 		print('Toda vez que você se cadastra no nosso sistema você ganha um arquivo só seu, que possui 3 sessões de texto: Avisos/lembretes, Texto e Área secreta.')
 		print('Além de você ter a liberdade de escrever o que quiser, nós te garantimos que ninguém pode ler o que está escrito. Segurança total e irrestrita.')
@@ -202,6 +224,7 @@ def tutorial(k):
 		print('Na pior das hipóteses, se você se cansar dos nossos serviços, você tem a opção de excluir permanentemente sua conta.')
 		print('Caso tenha se esquecido de como as coisas funcinam é só entrar nessa sessão novamente.\n')
 	elif k == 3:
+		print('')
 		print('Bem vindo ao menu de administrador')
 		print('Com o cargo de administrador você obtem grande poder sobre o sistema podendo obter informações dele ou informando os nossos usuário.')
 		print('Você pode até mesmo mudar o nome de usuário de alguém ou ser o juiz excluindo a conta de alguém.')
@@ -225,10 +248,11 @@ def Cadastra_conta():
 						arq.write('-------Avisos/Lembretes-------\n')
 						arq.write('------------Texto-------------\n')
 						arq.write('---------Área secreta---------\n')
-						arq.write('Senha: ' + input('Digite uma senha para proteger a sua área secreta\n'))
+						arq.write('Senha: ' + input('Digite uma senha para proteger a sua área secreta\n').strip())
 						arq.close()
-						Adiciona_nome(nome + ',' + senha + '.txt', contato, tipo)
-						aciona_Log('Novo usuário criado: ' + nome + ',' + senha + '.')
+						Adiciona_nome(nome + ',' + senha + '.txt', tipo, contato)
+						aciona_Log('Novo usuário criado: ' + nome + ',' + senha + '.txt || ' + tipo + ' || ' + contato) 
+						aciona_log_secreto('Novo usuário criado: ' + nome + ',' + senha + '.txt || ' + tipo + ' || ' + contato)
 						print('Conta criada com sucesso')
 					else:
 						print('Possui um elemento " || ", o que não pode, tente novamente')
@@ -243,21 +267,23 @@ def Cadastra_conta():
 	return
 
 def Exibir(arquivo, sec1, sec2, sec3):
-	arq = open(arquivo, 'r', encoding ='utf8')
-	Varquivo = []
-	for i in arq:
-		Varquivo.append(i.replace('\n',''))
-	for i in range(len(Varquivo)):
-		if Varquivo[i] == '------------Texto-------------':
-			n = i
-		if Varquivo[i] == '---------Área secreta---------':
-			n2 = i
+	arq, n, n2 = Carrega_arq(arquivo)
 	for i in range(0*sec1, n*sec1):
-		print(Varquivo[i])
+		print(arq[i])
 	for i in range(n*sec2, n2*sec2):
-		print(Varquivo[i])
-	for i in range(n2*sec3, len(Varquivo)*sec3):
-		print(Varquivo[i])
+		print(arq[i])
+	for i in range(n2*sec3, len(arq)*sec3):
+		print(arq[i])
+	return
+
+def Exibir_2(k):
+	if k == 1:
+		arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
+		print('Existem ' + str(n2-n-1) + ' contas cadastradas')
+	elif k == 2:
+		arq = open('Logs.txt', 'r', encoding = 'utf8')
+		for i in arq:
+			print(i.replace('\n', ''))
 	return
 
 def Escrever(arquivo, mensagem, k):
@@ -269,35 +295,47 @@ def Escrever(arquivo, mensagem, k):
 		arq2.write(mensagem+'\n')
 		for i in range(n, len(arq1)):
 			arq2.write(arq1[i]+'\n')
+		aciona_log_secreto('O usuário ' + arquivo + ' escreveu: ' + mensagem + ' ' + str(n))
 	if k == 2:
 		for i in range(n2):
 			arq2.write(arq1[i]+'\n')
 		arq2.write(mensagem+'\n')
 		for i in range(n2, len(arq1)):
 			arq2.write(arq1[i]+'\n')
+		aciona_log_secreto('O usuário ' + arquivo + ' escreveu: ' + mensagem + ' ' + str(n2))
 	if k == 3:
 		for i in range(len(arq1)):
 			arq2.write(arq1[i]+'\n')
 		arq2.write(mensagem+'\n')
+		aciona_log_secreto('O usuário ' + arquivo + ' escreveu: ' + mensagem + ' ' + str(len(arq1)))
+	arq2.close()
 	return
 
-def Apagar(arquivo, k):
+def Apagar(arquivo, k, linha):
 	arq, n, n2 = Carrega_arq(arquivo)
 	if k == 1:
 		print(arq[0])
 		for i in range(1, n):
 			print(str(i) + '. ' + arq[i])
 		linha = int(input('Digite a linha a ser excluida\n'))
+		aciona_log_secreto('O usuário ' + arquivo + ' apagou a linha: ' + str(linha))
 	if k == 2:
 		print(arq[n])
 		for i in range(n+1, n2):
 			print(str(i-n) + '. ' + arq[i])
 		linha = int(input('Digite a linha a ser excluida\n')) + n
+		aciona_log_secreto('O usuário ' + arquivo + ' apagou a linha: ' + str(linha))
 	if k == 3:
-		print(arq[n2])
-		for i in range(n2+2, len(arq)):
-			print(str(i-n2) + '. ' + arq[i])
-		linha = int(input('Digite a linha a ser excluida\n')) + n2 + 1
+		if len(arq) - n2 > 2:
+			print(arq[n2])
+			for i in range(n2+2, len(arq)):
+				print(str(i-n2 - 1) + '. ' + arq[i])
+			linha = int(input('Digite a linha a ser excluida\n')) + n2 + 2
+			aciona_log_secreto('O usuário ' + arquivo + ' apagou a linha: ' + str(linha))
+		else:
+			print('Não é possível apagar a sua senha secreta')
+			linha = len(arq) - 1
+			arq.append(arq[len(arq)-1])
 	for i in range(linha, len(arq)-1):
 		arq[i] = arq[i+1]
 	arq.pop()
@@ -308,20 +346,26 @@ def Apagar(arquivo, k):
 	return
 
 def Apagar_tudo(arquivo, k):
-	arq, n, n2 = Carrega_arq(arquivo)
+	Varq, n, n2 = Carrega_arq(arquivo)
 	if k == 1:
-		for i in range(1, len(arq)-n+1):
-			arq[i] = arq[i+n-1]
+		for i in range(1, len(Varq)-n+1):
+			Varq[i] = Varq[i+n-1]
 		for i in range(n-1):
-			arq.pop()
+			Varq.pop()
 	if k == 2:
-		for i in range(n+1, len(arq)-n2+n+1):
-			arq[i] = arq[i+n2-n-1]
+		for i in range(n+1, len(Varq)-n2+n+1):
+			Varq[i] = Varq[i+n2-n-1]
 		for i in range(n+1, n2):
-			arq.pop()
+			Varq.pop()
 	if k == 3:
-		for i in range(n2+2, len(arq)):
-			arq.pop()
+		for i in range(n2+2, len(Varq)):
+			Varq.pop()
+	aciona_log_secreto('O usuário ' + arquivo + ' consumiu toda a sessão: ' + str(k))
+	arq = open(arquivo, 'w', encoding = 'utf-8')
+	for i in range(len(Varq)):
+		arq.write(Varq[i]+'\n')
+	arq.close()
+	return
 
 def Trocar(nome, k):
 	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
@@ -368,16 +412,6 @@ def Trocar_senha_secreta(arquivo):
 		arq.close()
 	return
 
-def Exibir_2(k):
-	if k == 1:
-		arq, n, n2 = Carrega_arq('AdminAdmin.txt')
-		print('Existem ' + str(n2-n-1) + ' contas cadastradas')
-	elif k == 2:
-		arq = open('Logs.txt', 'r', encoding = 'utf8')
-		for i in arq:
-			print(i.replace('\n', ''))
-	return
-
 def Avisar_todos():
 	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
 	mensagem = input('Digite a mensagem\n')
@@ -386,7 +420,7 @@ def Avisar_todos():
 		Escrever(arq_ADM[i][0:n3+4], mensagem, 1)
 	return
 
-def Excluir(nome): ################################
+def Excluir(nome):
 	certeza = input('Você tem certeza de que deseja excluir sua conta? Este ato é completamente irreversível(sim/não)\n')
 	if certeza.strip().lower() == 'sim':
 		arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
@@ -397,9 +431,26 @@ def Excluir(nome): ################################
 				os.remove(arq_ADM[i][0:n4]+'.txt')
 				for j in range(i, len(arq_ADM)-1):
 					arq_ADM[j] = arq_ADM[j+1]
-				arq_ADM.pop()
+				arq = open('AdminAdmin.txt', 'w', encoding = 'utf8')
+				for i in range(len(arq_ADM)-1):
+					arq.write(arq_ADM[i]+'\n')
+				arq.close()
 				aciona_Log('O usuário ' + nome + ' excluiu sua conta.')
-				return
+	return
+
+def Reconstruir(arquivo):
+	log_s = open('Log_secreto.txt', 'r', encoding = 'utf8')
+	log = []
+	for i in log_s:
+		log.append(i.replace('\n', ''))
+	log_s.close()
+	n = 0
+	for i in range(len(log)):
+		if log[i][10:len(arquivo) + 10] == arquivo:
+			Executar(arquivo, log[i], len(arquivo) + 11)
+			n += 1
+	Excluir_logs_reconstruidos(n)
+	return
 
 #------------------Sessão de processamento suporte------------------
 def Carrega_arq(arquivo):
@@ -445,10 +496,15 @@ def Checa_senha_secreta(arquivo, senha):
 	return False
 
 def Checa_secreta(arquivo):
-	arq, n, n2 = Carrega_arq(arquivo)
-	if len(arq) - n2 > 1:
-		return True
-	return False
+	Varq, n, n2 = Carrega_arq(arquivo)
+	if len(Varq) - n2 - 1 == 0:
+		arq = open(arquivo, 'w', encoding = 'utf8')
+		for i in range(len(Varq)):
+			arq.write(Varq[i]+'\n')
+		senha = input('Digite uma senha para a sua área secreta\n')
+		arq.write('Senha: ' + senha + '\n')
+		arq.close()
+	return
 
 def Acha_contato(nome):
 	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
@@ -469,26 +525,32 @@ def Acha_tipo(nome):
 				if arq_ADM[i][j] == ' ':
 					return arq_ADM[i][j+1:]
 
-def Adiciona_nome(nome, contato, tipo):
+def Adiciona_nome(arquivo, tipo, contato):
 	arq_ADM, n, n2 = Carrega_arq('AdminAdmin.txt')
-	arq = open('AdminAdmin.txt', 'w', encoding ='utf8')
+	arq = open('AdminAdmin.txt', 'w', encoding = 'utf8')
 	for i in range(n):
 		arq.write(arq_ADM[i]+'\n')
 	for i in range(n, n2):
 		arq.write(arq_ADM[i]+'\n')
-	arq.write(nome + ' || ' + contato + ' || ' + tipo + '\n')
+	arq.write(arquivo + ' || ' + tipo + ' || ' + contato + '\n')
 	for i in range(n2, len(arq_ADM)):
 		arq.write(arq_ADM[i]+'\n')
 	arq.close()
 	return
 
 def aciona_Log(mensagem):
-	log = open('Logs.txt', 'a', encoding ='utf8')
+	log = open('Logs.txt', 'a', encoding = 'utf8')
 	log.write(mensagem + '\n')
 	log.close()
 	Checa_len_log()
-	arq_ADM = open('AdminAdmin.txt', 'a', encoding ='utf8')
+	arq_ADM = open('AdminAdmin.txt', 'a', encoding = 'utf8')
 	arq_ADM.write(mensagem + '\n')
+	return
+
+def aciona_log_secreto(mensagem):
+	log_s = open('Log_secreto.txt', 'a', encoding = 'utf8')
+	log_s.write(mensagem + '\n')
+	log_s.close()
 	return
 
 def Checa_len_log():
@@ -501,6 +563,42 @@ def Checa_len_log():
 		for i in range(len(arq_ADM)):
 			arq.write(arq_ADM[i] + '\n')
 		arq.close()
+	return
+
+def Executar(arquivo, linha, k):
+	if linha[k] == 'a':
+		for i in range(len(linha)-1, 0, -1):
+			if linha[i] == ' ':
+				Apagar(arquivo, 4, linha[i+1:len(linha)])
+				break
+	if linha[k] == 'c':
+		Apagar_tudo(arquivo, linha[len(linha)-1])
+	if linha[k] == 'e':
+		for i in range(len(linha)-1, 0, -1):
+			if linha[i] == ' ':
+				Escrever(arquivo, linha[len(arquivo)+21:i], linha[i+1:len(linha)])
+				break
+	if linha[:22] == 'Novo usuário criado: ':
+		usuario = linha.replace('Novo usuário criado: ','')
+		find = linha.find(' || ')
+		arquivo = usuario[:find]
+		usuario = usuario[find+4:]
+		find = usuario.find(' || ')
+		tipo = usuario[:find]
+		contato = usuario[find+4:]
+		Adiciona_nome(arquivo, tipo, contato)
+	return
+
+def Excluir_logs_reconstruidos(n):
+	log_s = open('Logs.txt', 'r', encoding = 'utf-8')
+	log = []
+	for i in log_s:
+		log.append(i.replace('\n', ''))
+	log_s.close()
+	arq = open('Logs.txt', 'w', encoding = 'utf-8')
+	for i in range(len(log)-n):
+		arq.write(log[i])
+	arq.close()
 	return
 
 main()

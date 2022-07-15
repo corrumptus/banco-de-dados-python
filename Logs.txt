@@ -1,0 +1,4 @@
+Novo usuário criado: lucas,Codding.txt || email || email@email.com
+Novo usuário criado: victor,sãopaulo.txt || email || email@email.com
+Novo usuário criado: gabi,ornintorrincos.txt || telefone || (12) 34567-8910
+Novo usuário criado: renan,Rochas.txt || telefone || (12) 34567-8910
